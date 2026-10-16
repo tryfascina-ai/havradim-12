@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>תשואות הוורדים 12</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=IBM+Plex+Sans+Hebrew:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column; summary tiles → main chart → table → assumptions. Ledger-like, quiet, numbers first. */
+:root{
+  --bg:#f7f7f4; --surface:#ffffff; --fg:#17191c; --fg2:#4d5258; --muted:#7a7f86; --rule:#dfe1dc; --grid:#ecedea;
+  --accent:#1f4e79;
+  --s-fast:#1baf7a; --s-base:#2a78d6; --s-delay:#6250d6; --s-none:#eb6834; --s-stock:#7a7f86;
+  --good:#0f7b4a; --bad:#b4372f;
+  --display:"Frank Ruhl Libre", "David", Georgia, serif;
+  --body:"IBM Plex Sans Hebrew", "Arial Hebrew", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141517; --surface:#1c1e21; --fg:#eceeef; --fg2:#b9bdc2; --muted:#8c9198; --rule:#2e3135; --grid:#25282b;
+  --accent:#8db8e8; --s-fast:#199e70; --s-base:#3987e5; --s-delay:#9085e9; --s-none:#d95926; --s-stock:#8c9198;
+  --good:#4cc38a; --bad:#ef7a70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141517; --surface:#1c1e21; --fg:#eceeef; --fg2:#b9bdc2; --muted:#8c9198; --rule:#2e3135; --grid:#25282b;
+  --accent:#8db8e8; --s-fast:#199e70; --s-base:#3987e5; --s-delay:#9085e9; --s-none:#d95926; --s-stock:#8c9198;
+  --good:#4cc38a; --bad:#ef7a70; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:28px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0 0 6px;text-wrap:balance}
+p{margin:0;max-width:68ch;color:var(--fg2)}
+.eyebrow{font-size:12px;letter-spacing:.06em;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{font:inherit;border:0;background:transparent;color:var(--fg2);padding:8px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tile .k{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg2)}
+.sw{width:10px;height:10px;border-radius:3px;flex:none}
+.tile .v{font-size:28px;font-weight:600}
+.tile .s{font-size:12.5px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:18px}
+.chart{position:relative;direction:ltr}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--fg2);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:8px 10px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.12);direction:rtl;min-width:170px}
+.tip b{display:block;margin-bottom:4px}
+.tip div{display:flex;justify-content:space-between;gap:12px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--grid);white-space:nowrap}
+th{font-weight:600;color:var(--fg2);font-size:12.5px}
+td.y{color:var(--fg2)}
+.pos{color:var(--good)} .neg{color:var(--bad)}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.notes ul{margin:0;padding-inline-start:18px;color:var(--fg2);display:flex;flex-direction:column;gap:6px}
+.flag{border-inline-start:3px solid var(--s-none);padding-inline-start:12px}
+@media (prefers-reduced-motion:no-preference){.line{transition:opacity .2s}}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap" dir="rtl">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <div class="eyebrow">גוש 10908 · חלקה 118 · יוזמה אלונים · תמ"א 38/2</div>
+    <h1>כמה תרוויח מהוורדים 12, בכל תרחיש</h1>
+    <p>הרווח המצטבר על ההון שלך (‎<span class="num" id="cashTxt"></span>&nbsp;₪: 25% הון עצמי + עלויות), שנה אחר שנה, 2027–2036. כולל: שווי הדירה פחות יתרת המשכנתא, וכל מה ששילמת יותר (או פחות) לעומת להמשיך לשכור. הקו המקווקו = אותו כסף בתיק מניות (6.5% לשנה, אחרי מס).</p>
+    <div class="ctrl">
+      <span class="eyebrow">איזו דירה:</span>
+      <div class="seg" role="group" aria-label="בחירת דירה">
+        <button id="b-u6" aria-pressed="true">ת"ח 6 · ~67 מ"ר → 83 מ"ר (לפי המתווכת)</button>
+        <button id="b-u5" aria-pressed="false">ת"ח 5 · 50 מ"ר → 61 מ"ר</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="tiles" id="tiles" aria-label="תשואה שנתית ממוצעת"></section>
+
+  <section class="card">
+    <h2>רווח מצטבר על ההון שלך (%)</h2>
+    <p style="font-size:13px">רחף על הגרף לראות כל שנה.</p>
+    <div class="chart" id="chart"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="card">
+    <h2>הטבלה המלאה</h2>
+    <p style="font-size:13px">רווח מצטבר בש"ח (ובאחוזים מההון ההתחלתי). "משוקלל" = לפי ההסתברויות שאני מעריך לכל תרחיש.</p>
+    <div class="tablewrap"><table id="tbl"></table></div>
+  </section>
+
+  <section class="notes">
+    <div class="card">
+      <h2>התרחישים</h2>
+      <ul id="sclist"></ul>
+    </div>
+    <div class="card">
+      <h2>ההנחות</h2>
+      <ul>
+        <li>מחיר 1,590,000 · משכנתא 75% · 4.6% · 30 שנה · החזר <span class="num" id="pmtTxt"></span> ₪ לחודש.</li>
+        <li>שכירות שנחסכת: 4,300 ₪ (ת"ח 6) / 3,950 ₪ (ת"ח 5), +3% לשנה. עלויות בעלות ~975 / 825 ₪ לחודש.</li>
+        <li>בזמן הבנייה (~2.5 שנה) היזם משלם את השכירות שלך, ואין ארנונה/ועד.</li>
+        <li>שווי היום = המחיר ששילמת. השוק מתמחר את הדירה החדשה בהדרגה לפי השלב.</li>
+        <li>ת"ח 6: שווי בלי הריסה 1.55M · דירה חדשה 2.45M. ת"ח 5: 1.30M · 1.95M.</li>
+        <li>עלות מכירה 2.5%. בלי מס שבח (דירה יחידה).</li>
+      </ul>
+    </div>
+    <div class="card flag">
+      <h2>לפני הכול</h2>
+      <ul>
+        <li>המתווכת: "~70 מ"ר, 3 חדרים, גדל ל-83". זה תואם ל<b>ת"ח 6</b> (66.73 רשום, +16 מ"ר בחוזה), לא ל-5.</li>
+        <li><b>לאמת בנסח טאבו</b>: מספר תת-החלקה ושמות המוכרים.</li>
+        <li>החוזה בלי תאריך, בלי נספח ב', ייפויי כוח לא חתומים. אין היתר עדיין.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+<script>
+const DATA={"u6": {"cash": 457500, "payment": 6113, "res": {"fast": {"rows": [{"year": 2027, "value": 1743040, "equity": 525864, "gain": 34904, "ret": 7.6, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 2091814, "equity": 885706, "gain": 374535, "ret": 81.9, "stock_gain": 47687, "stock_ret": 10.4}, {"year": 2029, "value": 2368964, "equity": 1176644, "gain": 646856, "ret": 141.4, "stock_gain": 75706, "stock_ret": 16.5}, {"year": 2030, "value": 2664938, "equity": 1486909, "gain": 940147, "ret": 205.5, "stock_gain": 106454, "stock_ret": 23.3}, {"year": 2031, "value": 2980800, "equity": 1817584, "gain": 1243838, "ret": 271.9, "stock_gain": 140029, "stock_ret": 30.6}, {"year": 2032, "value": 3100032, "equity": 1957612, "gain": 1358625, "ret": 297.0, "stock_gain": 177101, "stock_ret": 38.7}, {"year": 2033, "value": 3224033, "equity": 2103407, "gain": 1480974, "ret": 323.7, "stock_gain": 217813, "stock_ret": 47.6}, {"year": 2034, "value": 3352994, "equity": 2255207, "gain": 1611176, "ret": 352.2, "stock_gain": 262314, "stock_ret": 57.3}, {"year": 2035, "value": 3487114, "equity": 2413262, "gain": 1749537, "ret": 382.4, "stock_gain": 310761, "stock_ret": 67.9}, {"year": 2036, "value": 3626598, "equity": 2577829, "gain": 1896371, "ret": 414.5, "stock_gain": 363317, "stock_ret": 79.4}], "irr": 16.3}, "base": {"rows": [{"year": 2027, "value": 1681990, "equity": 466340, "gain": -24620, "ret": -5.4, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1778068, "equity": 579804, "gain": 56933, "ret": 12.4, "stock_gain": 47687, "stock_ret": 10.4}, {"year": 2029, "value": 2019359, "equity": 835780, "gain": 282592, "ret": 61.8, "stock_gain": 76277, "stock_ret": 16.7}, {"year": 2030, "value": 2273528, "equity": 1105284, "gain": 535122, "ret": 117.0, "stock_gain": 108203, "stock_ret": 23.7}, {"year": 2031, "value": 2491280, "equity": 1340302, "gain": 754857, "ret": 165.0, "stock_gain": 143031, "stock_ret": 31.3}, {"year": 2032, "value": 2720051, "equity": 1587131, "gain": 988144, "ret": 216.0, "stock_gain": 180869, "stock_ret": 39.5}, {"year": 2033, "value": 3013191, "equity": 1897836, "gain": 1275403, "ret": 278.8, "stock_gain": 221826, "stock_ret": 48.5}, {"year": 2034, "value": 3103587, "equity": 2012035, "gain": 1368004, "ret": 299.0, "stock_gain": 266588, "stock_ret": 58.3}, {"year": 2035, "value": 3196694, "equity": 2130102, "gain": 1466378, "ret": 320.5, "stock_gain": 315313, "stock_ret": 68.9}, {"year": 2036, "value": 3292595, "equity": 2252175, "gain": 1570717, "ret": 343.3, "stock_gain": 368165, "stock_ret": 80.5}], "irr": 14.5}, "delay": {"rows": [{"year": 2027, "value": 1637700, "equity": 423157, "gain": -67802, "ret": -14.8, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1714202, "equity": 517534, "gain": -5337, "ret": -1.2, "stock_gain": 47687, "stock_ret": 10.4}, {"year": 2029, "value": 1803218, "equity": 625042, "gain": 71854, "ret": 15.7, "stock_gain": 76277, "stock_ret": 16.7}, {"year": 2030, "value": 1905712, "equity": 746664, "gain": 164801, "ret": 36.0, "stock_gain": 108203, "stock_ret": 23.7}, {"year": 2031, "value": 2042641, "equity": 902879, "gain": 294034, "ret": 64.3, "stock_gain": 143602, "stock_ret": 31.4}, {"year": 2032, "value": 2206609, "equity": 1086524, "gain": 452438, "ret": 98.9, "stock_gain": 182617, "stock_ret": 39.9}, {"year": 2033, "value": 2431461, "equity": 1330649, "gain": 684816, "ret": 149.7, "stock_gain": 225399, "stock_ret": 49.3}, {"year": 2034, "value": 2667818, "equity": 1587160, "gain": 931429, "ret": 203.6, "stock_gain": 271534, "stock_ret": 59.4}, {"year": 2035, "value": 2972273, "equity": 1911292, "gain": 1247567, "ret": 272.7, "stock_gain": 321151, "stock_ret": 70.2}, {"year": 2036, "value": 3292595, "equity": 2252175, "gain": 1570717, "ret": 343.3, "stock_gain": 374382, "stock_ret": 81.8}], "irr": 14.4}, "none": {"rows": [{"year": 2027, "value": 1621800, "equity": 407655, "gain": -83305, "ret": -18.2, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1612620, "equity": 418492, "gain": -104379, "ret": -22.8, "stock_gain": 47687, "stock_ret": 10.4}, {"year": 2029, "value": 1644872, "equity": 470655, "gain": -82533, "ret": -18.0, "stock_gain": 76277, "stock_ret": 16.7}, {"year": 2030, "value": 1677770, "equity": 524420, "gain": -57442, "ret": -12.6, "stock_gain": 108203, "stock_ret": 23.7}, {"year": 2031, "value": 1711325, "equity": 579847, "gain": -28999, "ret": -6.3, "stock_gain": 143602, "stock_ret": 31.4}, {"year": 2032, "value": 1745552, "equity": 636994, "gain": 2907, "ret": 0.6, "stock_gain": 182617, "stock_ret": 39.9}, {"year": 2033, "value": 1780463, "equity": 695926, "gain": 38393, "ret": 8.4, "stock_gain": 225399, "stock_ret": 49.3}, {"year": 2034, "value": 1816072, "equity": 756708, "gain": 77577, "ret": 17.0, "stock_gain": 272104, "stock_ret": 59.5}, {"year": 2035, "value": 1852393, "equity": 819409, "gain": 120584, "ret": 26.4, "stock_gain": 322899, "stock_ret": 70.6}, {"year": 2036, "value": 1889441, "equity": 884100, "gain": 167543, "ret": 36.6, "stock_gain": 377955, "stock_ret": 82.6}], "irr": 2.6}}}, "u5": {"cash": 457500, "payment": 6113, "res": {"fast": {"rows": [{"year": 2027, "value": 1691040, "equity": 475164, "gain": -18196, "ret": -4.0, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1875494, "equity": 674794, "gain": 156897, "ret": 34.3, "stock_gain": 47804, "stock_ret": 10.4}, {"year": 2029, "value": 2031504, "equity": 847621, "gain": 306651, "ret": 67.0, "stock_gain": 76159, "stock_ret": 16.6}, {"year": 2030, "value": 2196994, "equity": 1030664, "gain": 468131, "ret": 102.3, "stock_gain": 107481, "stock_ret": 23.5}, {"year": 2031, "value": 2372473, "equity": 1224466, "gain": 632022, "ret": 138.1, "stock_gain": 141891, "stock_ret": 31.0}, {"year": 2032, "value": 2467372, "equity": 1340769, "gain": 720015, "ret": 157.4, "stock_gain": 179996, "stock_ret": 39.3}, {"year": 2033, "value": 2566067, "equity": 1461890, "gain": 814475, "ret": 178.0, "stock_gain": 221957, "stock_ret": 48.5}, {"year": 2034, "value": 2668710, "equity": 1588030, "gain": 915651, "ret": 200.1, "stock_gain": 267946, "stock_ret": 58.6}, {"year": 2035, "value": 2775458, "equity": 1719397, "gain": 1023804, "ret": 223.8, "stock_gain": 318141, "stock_ret": 69.5}, {"year": 2036, "value": 2886476, "equity": 1856210, "gain": 1139203, "ret": 249.0, "stock_gain": 372730, "stock_ret": 81.5}], "irr": 11.8}, "base": {"rows": [{"year": 2027, "value": 1656240, "equity": 441234, "gain": -52126, "ret": -11.4, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1725023, "equity": 528085, "gain": 288, "ret": 0.1, "stock_gain": 47804, "stock_ret": 10.4}, {"year": 2029, "value": 1855450, "equity": 675968, "gain": 115199, "ret": 25.2, "stock_gain": 76641, "stock_ret": 16.8}, {"year": 2030, "value": 1992151, "equity": 830942, "gain": 248608, "ret": 54.3, "stock_gain": 108961, "stock_ret": 23.8}, {"year": 2031, "value": 2114516, "equity": 972957, "gain": 370613, "ret": 81.0, "stock_gain": 144432, "stock_ret": 31.6}, {"year": 2032, "value": 2242430, "equity": 1121450, "gain": 500697, "ret": 109.4, "stock_gain": 183184, "stock_ret": 40.0}, {"year": 2033, "value": 2398254, "equity": 1298272, "gain": 650857, "ret": 142.3, "stock_gain": 225353, "stock_ret": 49.3}, {"year": 2034, "value": 2470202, "equity": 1394484, "gain": 722106, "ret": 157.8, "stock_gain": 271562, "stock_ret": 59.4}, {"year": 2035, "value": 2544308, "equity": 1494025, "gain": 798432, "ret": 174.5, "stock_gain": 321992, "stock_ret": 70.4}, {"year": 2036, "value": 2620637, "equity": 1597016, "gain": 880010, "ret": 192.4, "stock_gain": 376832, "stock_ret": 82.4}], "irr": 9.8}, "delay": {"rows": [{"year": 2027, "value": 1637700, "equity": 423157, "gain": -70202, "ret": -15.3, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1698289, "equity": 502019, "gain": -25778, "ret": -5.6, "stock_gain": 47804, "stock_ret": 10.4}, {"year": 2029, "value": 1764973, "equity": 587753, "gain": 26983, "ret": 5.9, "stock_gain": 76641, "stock_ret": 16.8}, {"year": 2030, "value": 1838181, "equity": 680821, "gain": 88588, "ret": 19.4, "stock_gain": 108961, "stock_ret": 23.8}, {"year": 2031, "value": 1926714, "equity": 789850, "gain": 167706, "ret": 36.7, "stock_gain": 144915, "stock_ret": 31.7}, {"year": 2032, "value": 2027501, "equity": 911894, "gain": 261440, "ret": 57.1, "stock_gain": 184663, "stock_ret": 40.4}, {"year": 2033, "value": 2154739, "equity": 1060845, "gain": 393630, "ret": 86.0, "stock_gain": 228376, "stock_ret": 49.9}, {"year": 2034, "value": 2287787, "equity": 1216630, "gain": 534351, "ret": 116.8, "stock_gain": 275747, "stock_ret": 60.3}, {"year": 2035, "value": 2450364, "equity": 1402430, "gain": 706837, "ret": 154.5, "stock_gain": 326932, "stock_ret": 71.5}, {"year": 2036, "value": 2620637, "equity": 1597016, "gain": 880010, "ret": 192.4, "stock_gain": 382093, "stock_ret": 83.5}], "irr": 9.7}, "none": {"rows": [{"year": 2027, "value": 1621800, "equity": 407655, "gain": -85705, "ret": -18.7, "stock_gain": 22303, "stock_ret": 4.9}, {"year": 2028, "value": 1352520, "equity": 164894, "gain": -362903, "ret": -79.3, "stock_gain": 47804, "stock_ret": 10.4}, {"year": 2029, "value": 1379570, "equity": 211985, "gain": -348784, "ret": -76.2, "stock_gain": 76641, "stock_ret": 16.8}, {"year": 2030, "value": 1407162, "equity": 260578, "gain": -331656, "ret": -72.5, "stock_gain": 108961, "stock_ret": 23.8}, {"year": 2031, "value": 1435305, "equity": 310727, "gain": -311417, "ret": -68.1, "stock_gain": 144915, "stock_ret": 31.7}, {"year": 2032, "value": 1464011, "equity": 362492, "gain": -287962, "ret": -62.9, "stock_gain": 184663, "stock_ret": 40.4}, {"year": 2033, "value": 1493291, "equity": 415934, "gain": -261182, "ret": -57.1, "stock_gain": 228376, "stock_ret": 49.9}, {"year": 2034, "value": 1523157, "equity": 471116, "gain": -230963, "ret": -50.5, "stock_gain": 276230, "stock_ret": 60.4}, {"year": 2035, "value": 1553620, "equity": 528105, "gain": -197188, "ret": -43.1, "stock_gain": 328411, "stock_ret": 71.8}, {"year": 2036, "value": 1584693, "equity": 586971, "gain": -159736, "ret": -34.9, "stock_gain": 385116, "stock_ret": 84.2}], "irr": -3.0}}}};
+const SC=[
+ {k:'fast', name:'מהיר', desc:'היתר 2028, מפתחות 2031, שוק +4%/שנה', c:'--s-fast', p:{u6:.15,u5:.15}},
+ {k:'base', name:'בסיס', desc:'היתר 2030, מפתחות 2033, שוק +3%/שנה', c:'--s-base', p:{u6:.30,u5:.30}},
+ {k:'delay',name:'עיכוב', desc:'היתר 2033, מפתחות 2036, שוק +3%/שנה', c:'--s-delay', p:{u6:.20,u5:.20}},
+ {k:'none', name:'אין הריסה', desc:'הפרויקט מתבטל ב-2028, שוק +2%/שנה', c:'--s-none', p:{u6:.35,u5:.35}},
+];
+let U='u6';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt=n=>(n<0?'−':'')+Math.abs(Math.round(n/1000)).toLocaleString('he-IL')+'K';
+const pct=n=>(n>0?'+':n<0?'−':'')+Math.abs(n).toFixed(0)+'%';
+function render(){
+  const d=DATA[U];
+  document.getElementById('cashTxt').textContent=d.cash.toLocaleString('he-IL');
+  document.getElementById('pmtTxt').textContent=d.payment.toLocaleString('he-IL');
+  ['u6','u5'].forEach(k=>document.getElementById('b-'+k).setAttribute('aria-pressed',k===U));
+  // tiles
+  const stockIrr=6.5*0.75+0; // rough after-tax
+  const exp=SC.reduce((a,s)=>a+s.p[U]*d.res[s.k].rows[9].ret,0);
+  const tiles=SC.map(s=>{const r=d.res[s.k];const e=r.rows[9];return '<div class="tile"><div class="k"><i class="sw" style="background:var('+s.c+')"></i>'+s.name+' · '+Math.round(s.p[U]*100)+'%</div><div class="v num">'+(r.irr>0?'':'')+r.irr.toFixed(1)+'%</div><div class="s">לשנה, 10 שנים · '+fmt(e.gain)+' ₪ ('+pct(e.ret)+')</div></div>'}).join('');
+  const st=d.res.base.rows[9];
+  document.getElementById('tiles').innerHTML=tiles+'<div class="tile"><div class="k"><i class="sw" style="background:var(--s-stock)"></i>מניות (השוואה)</div><div class="v num">~6.5%</div><div class="s">לשנה לפני מס · '+fmt(st.stock_gain)+' ₪ ('+pct(st.stock_ret)+')</div></div>';
+  // scenario list
+  document.getElementById('sclist').innerHTML=SC.map(s=>'<li><b style="color:var('+s.c+')">'+s.name+'</b> ('+Math.round(s.p[U]*100)+'%): '+s.desc+'</li>').join('')+'<li>ההסתברויות הן הערכה שלי, על בסיס הרקורד של היזם בחיפה, סעיף הביטול אחרי 36 חודשים, ופקיעת תמ"א 38.</li>';
+  // table
+  let h='<thead><tr><th>שנה</th>'+SC.map(s=>'<th><i class="sw" style="display:inline-block;background:var('+s.c+');margin-inline-end:6px"></i>'+s.name+'</th>').join('')+'<th>משוקלל</th><th>מניות</th></tr></thead><tbody>';
+  for(let i=0;i<10;i++){
+    const y=d.res.base.rows[i].year;
+    const w=SC.reduce((a,s)=>a+s.p[U]*d.res[s.k].rows[i].gain,0);
+    h+='<tr><td class="y num">'+y+'</td>'+SC.map(s=>{const r=d.res[s.k].rows[i];return '<td class="num '+(r.gain>=0?'pos':'neg')+'">'+fmt(r.gain)+' <span style="color:var(--muted)">('+pct(r.ret)+')</span></td>'}).join('')+
+      '<td class="num '+(w>=0?'pos':'neg')+'"><b>'+fmt(w)+'</b> <span style="color:var(--muted)">('+pct(w/d.cash*100)+')</span></td>'+
+      '<td class="num">'+fmt(d.res.base.rows[i].stock_gain)+' <span style="color:var(--muted)">('+pct(d.res.base.rows[i].stock_ret)+')</span></td></tr>';
+  }
+  document.getElementById('tbl').innerHTML=h+'</tbody>';
+  drawChart(d);
+}
+function drawChart(d){
+  const el=document.getElementById('chart');
+  const W=900,H=380,m={l:56,r:16,t:16,b:36};
+  const series=SC.map(s=>({name:s.name,c:css(s.c),vals:d.res[s.k].rows.map(r=>r.ret)}));
+  series.push({name:'מניות',c:css('--s-stock'),vals:d.res.base.rows.map(r=>r.stock_ret),dash:true});
+  const all=series.flatMap(s=>s.vals).concat([0]);
+  let lo=Math.floor(Math.min(...all)/50)*50, hi=Math.ceil(Math.max(...all)/50)*50;
+  const step=(hi-lo)>300?100:50;
+  const x=i=>m.l+i*(W-m.l-m.r)/9, y=v=>m.t+(hi-v)*(H-m.t-m.b)/(hi-lo);
+  let g='';
+  for(let v=lo;v<=hi;v+=step){g+='<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="'+(v===0?css('--muted'):css('--grid'))+'" stroke-width="'+(v===0?1.2:1)+'"/><text x="'+(m.l-8)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="12" fill="'+css('--muted')+'">'+(v>0?'+':'')+v+'%</text>';}
+  for(let i=0;i<10;i++)g+='<text x="'+x(i)+'" y="'+(H-12)+'" text-anchor="middle" font-size="12" fill="'+css('--muted')+'">'+(2027+i)+'</text>';
+  series.forEach(s=>{const pts=s.vals.map((v,i)=>x(i)+','+y(v)).join(' ');
+    g+='<polyline class="line" points="'+pts+'" fill="none" stroke="'+s.c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"'+(s.dash?' stroke-dasharray="5 5"':'')+'/>';
+    const L=s.vals.length-1; g+='<circle cx="'+x(L)+'" cy="'+y(s.vals[L])+'" r="4" fill="'+s.c+'" stroke="'+css('--surface')+'" stroke-width="2"/>';});
+  g+='<line id="xh" y1="'+m.t+'" y2="'+(H-m.b)+'" stroke="'+css('--muted')+'" stroke-dasharray="3 3" opacity="0"/>';
+  el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="רווח מצטבר באחוזים לפי תרחיש">'+g+'<rect id="hit" x="'+m.l+'" y="'+m.t+'" width="'+(W-m.l-m.r)+'" height="'+(H-m.t-m.b)+'" fill="transparent"/></svg><div class="tip" id="tip" hidden></div>';
+  document.getElementById('legend').innerHTML=series.map(s=>'<span><svg width="22" height="8"><line x1="0" x2="22" y1="4" y2="4" stroke="'+s.c+'" stroke-width="2"'+(s.dash?' stroke-dasharray="4 3"':'')+'/></svg>'+s.name+'</span>').join('');
+  const svg=el.querySelector('svg'),tip=document.getElementById('tip'),xh=document.getElementById('xh');
+  function move(ev){const r=svg.getBoundingClientRect();const px=(ev.clientX-r.left)*W/r.width;let i=Math.round((px-m.l)/((W-m.l-m.r)/9));i=Math.max(0,Math.min(9,i));
+    xh.setAttribute('x1',x(i));xh.setAttribute('x2',x(i));xh.setAttribute('opacity',1);
+    tip.innerHTML='<b>'+(2027+i)+'</b>'+series.map(s=>'<div><span style="color:'+s.c+'">'+s.name+'</span><span class="num">'+pct(s.vals[i])+'</span></div>').join('');
+    tip.hidden=false;const tx=x(i)*r.width/W;tip.style.top='10px';tip.style.left=(tx>r.width/2?tx-190:tx+14)+'px';}
+  svg.addEventListener('mousemove',move);svg.addEventListener('mouseleave',()=>{tip.hidden=true;xh.setAttribute('opacity',0)});
+}
+document.getElementById('b-u6').onclick=()=>{U='u6';render()};
+document.getElementById('b-u5').onclick=()=>{U='u5';render()};
+render();
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',render);new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});}catch(e){}
+</script>
+
+</body>
+</html>
